@@ -30,9 +30,9 @@
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
         <!--todo: a adapter-->
-        <sonar.organization>ept-git</sonar.organization>
+        <sonar.organization>todos</sonar.organization>
         <sonar.language>java</sonar.language>
-        <sonar.projectKey>seenibu_todos</sonar.projectKey>
+        <sonar.projectKey>todos</sonar.projectKey>
         <sonar.projectName>TODOS</sonar.projectName>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
