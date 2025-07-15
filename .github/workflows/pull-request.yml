@@ -93,41 +93,64 @@
 #            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 #            -Dsonar.host.url=http://localhost:9000
 
-name: SonarCloud
+name: Pull Request
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
   build:
-    name: Build and analyze on SonarCloud
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Set up JDK 17
+    steps:
+      # Checkout du code (branche de la PR)
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      # Set up Java
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
+      # Scan de secrets (Gitleaks)
+      - name: Scan de secrets (Gitleaks)
+        uses: gitleaks/actions/gitleaks@v2
         with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          args: detect --source=. --verbose
 
-      - name: Build and analyze
-        run: mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=TON_ORGANISATION_TONPROJET \
-          -Dsonar.organization=TON_ORGANISATION \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      # Scan des vulnérabilités (OWASP Dependency-Check)
+      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "pull-request-scan"
+          format: "HTML"
+          failOnCVSS: 7.0
+
+      # Compilation et tests
+      - name: Compilation et tests
+        run: mvn clean verify
+
+      # Analyse Quality Gate avec SonarCloud
+      - name: Analyse Quality Gate avec SonarCloud
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=TON_ORG_TONPROJET \
+            -Dsonar.organization=TON_ORG \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      # Vérification du Quality Gate
+      - name: Vérification du Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          sonar-host-url: https://sonarcloud.io
+
 
