@@ -144,7 +144,7 @@ jobs:
             -Dsonar.projectKey=todos \
             -Dsonar.organization=todos \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       # Vérification du Quality Gate
