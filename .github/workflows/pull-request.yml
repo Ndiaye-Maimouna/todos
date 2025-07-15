@@ -53,8 +53,7 @@ name: Pull Request
 on:
   pull_request:
     branches:
-      - 'DIC1-*'
-      - 'IS-*'
+      - main
 
 jobs:
   build:
@@ -90,6 +89,6 @@ jobs:
 
       - name: Analyse Quality Gate avec SonarQube
         run: |
-          mvn sonar:sonar \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          mvn sonar:sonar 
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} 
             -Dsonar.host.url=http://localhost:9000
