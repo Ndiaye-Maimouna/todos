@@ -141,10 +141,11 @@ jobs:
       - name: Analyse Quality Gate avec SonarCloud
         run: |
           mvn sonar:sonar \
-            -Dsonar.projectKey=TON_ORG_TONPROJET \
-            -Dsonar.organization=TON_ORG \
+            -Dsonar.projectKey=todos \
+            -Dsonar.organization=todos \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       # Vérification du Quality Gate
       - name: Vérification du Quality Gate

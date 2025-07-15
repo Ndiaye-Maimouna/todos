@@ -3,8 +3,6 @@ package sn.ept.git.seminaire.cicd.data;
 
 import sn.ept.git.seminaire.cicd.entities.Tag;
 
-import java.time.LocalDateTime;
-
 public final class TagTestData extends TestData {
 
     public static Tag defaultTag() {

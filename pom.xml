@@ -30,9 +30,9 @@
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
         <!--todo: a adapter-->
-        <sonar.organization>ept-git</sonar.organization>
+        <sonar.organization>todos</sonar.organization>
         <sonar.language>java</sonar.language>
-        <sonar.projectKey>seenibu_todos</sonar.projectKey>
+        <sonar.projectKey>todos</sonar.projectKey>
         <sonar.projectName>TODOS</sonar.projectName>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -60,13 +60,7 @@
         <maven-cucumber-reporting.version>5.3.0</maven-cucumber-reporting.version>
         <maven-surefire-plugin.argLine>-Xshare:off</maven-surefire-plugin.argLine>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-
-        <sonar.projectKey>todos</sonar.projectKey>
-        <sonar.projectName>todos</sonar.projectName>
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
-
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
@@ -390,8 +384,9 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
+
+
 
     </build>
     <profiles>
