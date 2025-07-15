@@ -323,26 +323,55 @@
                 <version>5.1.0.4751</version>
             </plugin>
 
+<!--            <plugin>-->
+<!--                <groupId>org.jacoco</groupId>-->
+<!--                <artifactId>jacoco-maven-plugin</artifactId>-->
+<!--                <version>0.8.11</version>-->
+<!--                <executions>-->
+<!--                    &lt;!&ndash; Injecte l’agent JaCoCo avant les tests &ndash;&gt;-->
+<!--                    <execution>-->
+<!--                        <id>prepare-agent</id>-->
+<!--                        <goals>rep-->
+<!--                            <goal>prepare-agent</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>test-compile</phase>-->
+<!--                    </execution>-->
+<!--                    &lt;!&ndash; Génére le rapport après les tests &ndash;&gt;-->
+<!--                    <execution>-->
+<!--                        <id>report</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>report</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
                 <executions>
-                    <!-- Injecte l’agent JaCoCo avant les tests -->
+                    <!-- Tests unitaires -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <phase>test-compile</phase>
+                        <configuration>
+                            <propertyName>surefire.argLine</propertyName>
+                        </configuration>
                     </execution>
-                    <!-- Génére le rapport après les tests -->
+
+                    <!-- Tests d'intégration -->
                     <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
+                        <id>prepare-agent-integration</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>report</goal>
+                            <goal>prepare-agent-integration</goal>
                         </goals>
+                        <configuration>
+                            <propertyName>failsafe.argLine</propertyName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
