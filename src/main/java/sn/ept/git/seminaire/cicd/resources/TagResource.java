@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sn.ept.git.seminaire.cicd.utils.ValidatonUtils;
+import org.springframework.data.domain.PageRequest;
 
 import java.net.URI;
 import java.util.Optional;
@@ -29,10 +31,12 @@ public class TagResource {
 
     @GetMapping(UrlMapping.Tag.ALL)
     public ResponseEntity<Page<TagDTO>> findAll(
-            @PageableDefault Pageable page
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
         log.info(LogUtils.LOG_START,CLASS_NAME, "findAll");
-        Page<TagDTO> result = service.findAll(page);
+        ValidatonUtils.validatePageMeta(page, size);
+        Page<TagDTO> result = service.findAll(PageRequest.of(page, size));
         return ResponseEntity.ok().body(result);
     }
 

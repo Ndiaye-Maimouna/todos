@@ -68,7 +68,7 @@ public class TagService {
     public TagDTO update(String uuid, TagDTO dto) {
         log.info(LogUtils.LOG_START, CLASS_NAME, "update");
         Optional<Tag> optional = repository.findById(uuid);
-        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.TODO_BY_ID, dto.getId());
+        ExceptionUtils.presentOrThrow(optional, ItemNotFoundException.TAG_BY_ID, dto.getId());
         Optional<Tag> optionalTitle = repository.findByNameWithIdNotEquals(dto.getName(), uuid);
         ExceptionUtils.absentOrThrow(optionalTitle, ItemExistsException.TITLE_EXISTS, dto.getName());
         Tag tag = optional.get();
