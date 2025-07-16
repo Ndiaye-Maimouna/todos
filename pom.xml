@@ -359,6 +359,7 @@
                         <include>**/*Cucumber*.java</include>
                     </includes>
                     <argLine>${maven-surefire-plugin.argLine}</argLine>
+                    <argLine>-Duser.language=en -Duser.country=US</argLine>
                 </configuration>
             </plugin>
 
@@ -396,6 +397,7 @@
                         <include>**/Cucumber*.java</include>
                         <include>**/*Cucumber*.java</include>
                     </includes>
+                    <argLine>-Duser.language=en -Duser.country=US</argLine>
                 </configuration>
             </plugin>
 
