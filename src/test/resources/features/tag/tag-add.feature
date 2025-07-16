@@ -27,7 +27,7 @@ Feature:  BDD Scenarios of Tag API - Add Tag
     Then the tag http status is 400
     And the tag returned error body looks like:
       | system_id                            | system_name | type       | status | message                                          |
-      | be7e84a8-9f56-405b-a15a-2646a8012c89 | MS-TODOS    | VALIDATION | 400    | name: la taille doit être comprise entre 2 et 50 |
+      | be7e84a8-9f56-405b-a15a-2646a8012c89 | MS-TODOS    | VALIDATION | 400    | name: size must be between 2 and 50 |
     Examples:
       | name                                                                                          |
       | n                                                                                              |
@@ -41,7 +41,7 @@ Feature:  BDD Scenarios of Tag API - Add Tag
     Then the tag http status is 400
     And the tag returned error body looks like:
       | system_id                            | system_name | type       | status | message                  |
-      | be7e84a8-9f56-405b-a15a-2646a8012c89 | MS-TODOS    | VALIDATION | 400    | name: ne doit pas être vide |
+      | be7e84a8-9f56-405b-a15a-2646a8012c89 | MS-TODOS    | VALIDATION | 400    | name: must not be blank |
 
 
 
