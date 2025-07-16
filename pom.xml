@@ -334,7 +334,7 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <phase>initialize</phase>
+                        <phase>test-compile</phase>
                     </execution>
                     <!-- Génére le rapport après les tests -->
                     <execution>
