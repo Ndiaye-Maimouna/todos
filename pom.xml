@@ -33,7 +33,7 @@
         <sonar.organization>todos</sonar.organization>
         <sonar.language>java</sonar.language>
         <sonar.projectKey>todos</sonar.projectKey>
-        <sonar.projectName>TODOS</sonar.projectName>
+        <sonar.projectName>todos</sonar.projectName>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
