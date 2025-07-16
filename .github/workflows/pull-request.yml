@@ -138,14 +138,6 @@ jobs:
         run: mvn clean verify -Put -Pit
 
       # Analyse Quality Gate avec SonarCloud
-#      - name: Analyse Quality Gate avec SonarCloud
-#        run: |
-#          mvn sonar:sonar \
-#            -Dsonar.projectKey=todos \
-#            -Dsonar.organization=todos \
-#            -Dsonar.host.url=https://sonarcloud.io \
-#            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-#            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
       - name: Analyse Quality Gate avec SonarCloud
         run: |
           mvn sonar:sonar \
@@ -153,11 +145,7 @@ jobs:
             -Dsonar.organization=todos \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
-            -Dsonar.pullrequest.branch=${{ github.head_ref }} \
-            -Dsonar.pullrequest.base=main
-
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
 
       # Vérification du Quality Gate
