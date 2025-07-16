@@ -139,13 +139,12 @@ public class TagStepIT {
                 .when().get(API_TAG_PATH + "?page=%s&size=%s&%s".formatted(page, size, sort));
     }
 
-//    @When("call delete tag all with page={int} and size={int}")
-//    public void callDeleteAllTagWithId(int page, int size) {
-//        response = request().contentType(ContentType.JSON)
-//                .log()
-//                .all()
-//                .when().delete(API_TAG_PATH);
-//    }
+    @When("call delete all tags")
+    public void callDeleteAllTags() {
+        response = request().contentType(ContentType.JSON)
+            .when()
+            .delete(API_TAG_PATH);
+    }
 
     @When("call delete tag with id={string}")
     public void callDeleteTagWithId(String id) {
