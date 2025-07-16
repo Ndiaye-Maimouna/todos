@@ -135,7 +135,7 @@ jobs:
 
       # Compilation et tests
       - name: Compilation et tests
-        run: mvn clean verify
+        run: mvn clean verify -Put,it
 
       # Analyse Quality Gate avec SonarCloud
       - name: Analyse Quality Gate avec SonarCloud
