@@ -40,6 +40,7 @@ public final class UrlMapping {
         public static final String ADD = Tag.BASE;
         public static final String UPDATE = Tag.FIND_BY_ID;
         public static final String DELETE = Tag.FIND_BY_ID;
+        public static final String DELETE_ALL = Tag.BASE;
     }
 
 

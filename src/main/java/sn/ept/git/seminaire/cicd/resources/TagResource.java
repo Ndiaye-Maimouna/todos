@@ -74,6 +74,13 @@ public class TagResource {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping(UrlMapping.Tag.DELETE_ALL)
+    public ResponseEntity<Void> deleteAllTags() {
+        log.info(LogUtils.LOG_START,CLASS_NAME, "deleteAll");
+        service.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

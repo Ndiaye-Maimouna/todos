@@ -123,4 +123,14 @@ class TagRessourceTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void deleteAll_shouldDeleteAllTags() throws Exception {
+        Mockito.doNothing().when(tagService).deleteAll();
+
+        mockMvc.perform(delete(UrlMapping.Tag.DELETE_ALL)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
 }
