@@ -84,6 +84,7 @@ jobs:
           git config user.email "actions@github.com"
           git commit -am "Bump version to $NEW_VERSION"
           git tag "v$NEW_VERSION"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push origin main --tags
 
       # Build and Publish to Docker
