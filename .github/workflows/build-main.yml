@@ -93,9 +93,9 @@ jobs:
 
       # Scan de secrets (Gitleaks)
       - name: Scan de secrets (Gitleaks)
-        uses: zricethezav/gitleaks-action@v2
+        uses: zricethezav/gitleaks-action@v1
         with:
-          args: detect --source=. --verbose
+          args: --path=. --verbose
 
 
       # Scan des vulnérabilités (OWASP Dependency-Check)
