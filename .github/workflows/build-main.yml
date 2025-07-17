@@ -107,7 +107,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:$VERSION
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:latest
 
-      # Déploiement
+      # Déploiementt
       - name: Déploiement
         run: |
           echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
