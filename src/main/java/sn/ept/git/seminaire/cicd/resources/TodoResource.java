@@ -75,6 +75,13 @@ public class TodoResource {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping(UrlMapping.Todo.DELETE_ALL)
+    public ResponseEntity<Void> deleteAllTodos() {
+        log.info(LogUtils.LOG_START,CLASS_NAME, "deleteAll");
+        service.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping(UrlMapping.Todo.COMPLETE)
     public ResponseEntity<TodoDTO> complete(@PathVariable("id") String id) {
         log.info(LogUtils.LOG_START,CLASS_NAME, "complete");

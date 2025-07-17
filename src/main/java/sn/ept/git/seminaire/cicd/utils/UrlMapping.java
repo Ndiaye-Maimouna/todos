@@ -25,6 +25,7 @@ public final class UrlMapping {
         public static final String ADD = Todo.BASE;
         public static final String UPDATE = Todo.FIND_BY_ID;
         public static final String DELETE = Todo.FIND_BY_ID;
+        public static final String DELETE_ALL = Todo.BASE;
         public static final String COMPLETE = Todo.FIND_BY_ID+"/complete";
     }
 

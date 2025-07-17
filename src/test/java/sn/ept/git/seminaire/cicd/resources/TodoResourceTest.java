@@ -166,6 +166,16 @@ class TodoResourceTest {
 
     @SneakyThrows
     @Test
+    void deleteAll_shouldDeleteAllTodos() throws Exception {
+        Mockito.doNothing().when(service).deleteAll();
+
+        mockMvc.perform(delete(UrlMapping.Todo.DELETE_ALL)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @SneakyThrows
+    @Test
     void complete_shouldCompleteTodo() {
         dto.setCompleted(true);
         Mockito.when(service.complete(Mockito.anyString()))
