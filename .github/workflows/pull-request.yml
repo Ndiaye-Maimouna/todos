@@ -30,17 +30,17 @@ jobs:
       - name: Install unzip
         run: sudo apt-get update && sudo apt-get install -y unzip
 
-      - name: Install OWASP Dependency-Check
+      - name: Install OWASP Dependency-Check v12.1.0
         run: |
-          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip
           unzip dependency-check.zip -d dependency-check
 
-      - name: Run OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check (JSON only)
         run: |
           ./dependency-check/dependency-check/bin/dependency-check.sh \
             --project "pull-request-scan" \
             --scan ./ \
-            --format HTML \
+            --format JSON \
             --out ./reports \
             --disableYarnAudit --disableNodeAudit
 
@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: ./reports
+          path: ./reports/dependency-check-report.json
 
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
