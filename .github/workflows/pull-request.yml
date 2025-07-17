@@ -31,36 +31,14 @@ jobs:
           args: --path=. --verbose
 
       # Scan des vulnérabilités (OWASP Dependency-Check)
-#      - name: Scan des vulnérabilités (OWASP Dependency-Check)
-#        uses: dependency-check/Dependency-Check_Action@main
-#        with:
-#          project: "pull-request-scan"
-#          format: "HTML"
-#          out: "reports"
-#          path: "."
-
-      - name: Install OWASP Dependency-Check
-        run: |
-          VERSION=9.0.10
-          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v$VERSION/dependency-check-$VERSION-release.zip
-          unzip dependency-check.zip -d dependency-check
-          chmod +x dependency-check/bin/dependency-check.sh
-      
-      - name: Run Dependency-Check
-        run: |
-          ./dependency-check/bin/dependency-check.sh \
-            --project "pull-request-scan" \
-            --scan . \
-            --format HTML \
-            --out reports \
-            --disableAssembly \
-            --failOnCVSS 7
-
-      - name: Upload Dependency-Check report
-        uses: actions/upload-artifact@v4
+      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+        uses: dependency-check/Dependency-Check_Action@main
         with:
-          name: dependency-check-report
-          path: reports
+          project: "pull-request-scan"
+          format: "HTML"
+          out: "reports"
+          path: "."
+          args: "--noupdate
 
 
         # Compilation et tests
