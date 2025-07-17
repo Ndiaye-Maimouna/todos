@@ -61,9 +61,9 @@ jobs:
 
       # Vérification du Quality Gate
       - name: Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         with:
-          scanMetadataReportFile: .scannerwork/report-task.txt
+          projectBaseDir: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
