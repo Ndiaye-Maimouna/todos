@@ -146,6 +146,13 @@ public class CucumberStepIT {
                 .when().get(API_PATH + "?page=%s&size=%s&%s".formatted(page, size, sort));
     }
 
+    @When("call delete all todos")
+    public void callDeleteAllTodos() {
+        response = request()
+                .when()
+                .delete(API_PATH);
+    }
+
     @When("call delete with id={string}")
     public void callDeleteWithId(String id) {
         response = request()

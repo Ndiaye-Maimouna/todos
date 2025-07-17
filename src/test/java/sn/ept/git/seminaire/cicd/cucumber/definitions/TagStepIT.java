@@ -141,10 +141,11 @@ public class TagStepIT {
 
     @When("call delete all tags")
     public void callDeleteAllTags() {
-        response = request().contentType(ContentType.JSON)
+        response = request()
             .when()
             .delete(API_TAG_PATH);
     }
+
 
     @When("call delete tag with id={string}")
     public void callDeleteTagWithId(String id) {
