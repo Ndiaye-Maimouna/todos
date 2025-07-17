@@ -43,19 +43,26 @@ jobs:
 #            --format JSON \
 #            --out ./reports \
 #            --disableYarnAudit --disableNodeAudit
-      - name: Scan de vulnérabilités
+      - name: Créer le dossier de rapport
+        run: mkdir -p reports && sudo chown -R 1000:1000 reports
+
+      - name: Lancer le scan OWASP Dependency-Check
         run: |
-          mkdir -p reports
-          sudo chown -R 1000:1000 reports
-          
           docker run --rm \
-            -v ${{ github.workspace }}:/src \
+            -v "${{ github.workspace }}:/src" \
             owasp/dependency-check:latest \
-            --project "scan-complet" \
+            --project "scan-owasp" \
             --scan /src \
-            --format "HTML" \
+            --format "HTML" --format "JSON" \
             --out /src/reports \
+            --nvdApiKey "${{ secrets.NVD_API_KEY }}" \
             --failOnCVSS 10
+
+      - name: Uploader le rapport en artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-owasp
+          path: reports
 
 
       - name: Upload report
