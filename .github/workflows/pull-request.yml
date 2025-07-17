@@ -36,7 +36,9 @@ jobs:
         with:
           project: "pull-request-scan"
           format: "HTML"
-          failOnCVSS: 7.0
+          out: "reports"
+          path: "."
+          args: "--failOnCVSS 7.0 --noupdate"
 
       # Compilation et tests
       - name: Compilation et tests
