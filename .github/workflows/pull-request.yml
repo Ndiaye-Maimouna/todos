@@ -106,7 +106,6 @@ jobs:
 
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      LANG: en_US.UTF-8
 
     steps:
       # Checkout du code (branche de la PR)
