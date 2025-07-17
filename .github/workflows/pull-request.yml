@@ -43,19 +43,20 @@ jobs:
 #            --format JSON \
 #            --out ./reports \
 #            --disableYarnAudit --disableNodeAudit
-      - name: Create reports folder
-        run: mkdir -p reports
-
-      - name: Run Dependency-Check with Docker
+      - name: Scan de vulnérabilités
         run: |
+          mkdir -p reports
+          sudo chown -R 1000:1000 reports
+          
           docker run --rm \
-            -v "$(pwd):/src" \
+            -v ${{ github.workspace }}:/src \
             owasp/dependency-check:latest \
-            --project "pull-request-scan" \
+            --project "scan-complet" \
             --scan /src \
-            --format HTML \
+            --format "HTML" \
             --out /src/reports \
-            --disableYarnAudit --disableNodeAudit
+            --failOnCVSS 10
+
 
       - name: Upload report
         uses: actions/upload-artifact@v4
