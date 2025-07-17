@@ -60,10 +60,10 @@ jobs:
           ls -la .scannerwork/ || echo "Dossier .scannerwork non trouvé"
 
       # Vérification du Quality Gate
-      - name: Quality Gate
-        uses: SonarSource/sonarcloud-github-action@v2
+      - name: Vérifier le Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@master
         with:
-          projectBaseDir: .
+          scanMetadataReportFile: target/sonar/.scannerwork/report-task.txt 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
