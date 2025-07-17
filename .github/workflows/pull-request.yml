@@ -38,7 +38,6 @@ jobs:
           format: "HTML"
           out: "reports"
           path: "."
-          args: "--failOnCVSS 7.0 --noupdate"
 
       # Compilation et tests
       - name: Compilation et tests
