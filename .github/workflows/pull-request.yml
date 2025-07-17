@@ -27,22 +27,41 @@ jobs:
         with:
           args: --path=. --verbose
 
-      - name: Install unzip
-        run: sudo apt-get update && sudo apt-get install -y unzip
+#      - name: Install unzip
+#        run: sudo apt-get update && sudo apt-get install -y unzip
+#
+#      - name: Install OWASP Dependency-Check v12.1.0
+#        run: |
+#          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip
+#          unzip dependency-check.zip -d dependency-check
+#
+#      - name: Run OWASP Dependency-Check (JSON only)
+#        run: |
+#          ./dependency-check/dependency-check/bin/dependency-check.sh \
+#            --project "pull-request-scan" \
+#            --scan ./ \
+#            --format JSON \
+#            --out ./reports \
+#            --disableYarnAudit --disableNodeAudit
+      - name: Create reports folder
+        run: mkdir -p reports
 
-      - name: Install OWASP Dependency-Check v12.1.0
+      - name: Run Dependency-Check with Docker
         run: |
-          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip
-          unzip dependency-check.zip -d dependency-check
-
-      - name: Run OWASP Dependency-Check (JSON only)
-        run: |
-          ./dependency-check/dependency-check/bin/dependency-check.sh \
+          docker run --rm \
+            -v "$(pwd):/src" \
+            owasp/dependency-check:latest \
             --project "pull-request-scan" \
-            --scan ./ \
-            --format JSON \
-            --out ./reports \
+            --scan /src \
+            --format HTML \
+            --out /src/reports \
             --disableYarnAudit --disableNodeAudit
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: ./reports
 
       - name: Upload Dependency-Check report
         uses: actions/upload-artifact@v4
