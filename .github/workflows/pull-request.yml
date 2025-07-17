@@ -38,7 +38,7 @@ jobs:
           format: "HTML"
           out: "reports"
           path: "."
-          args: "--noupdate
+          args: "--noupdate"
 
 
         # Compilation et tests
