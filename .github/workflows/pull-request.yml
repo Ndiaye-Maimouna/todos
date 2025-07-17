@@ -26,9 +26,9 @@ jobs:
 
       # Scan de secrets (Gitleaks)
       - name: Scan de secrets (Gitleaks)
-        uses: gitleaks/actions/gitleaks@v2
+        uses: zricethezav/gitleaks-action@v1
         with:
-          args: detect --source=. --verbose
+          args: --path=. --verbose
 
       # Scan des vulnérabilités (OWASP Dependency-Check)
       - name: Scan des vulnérabilités (OWASP Dependency-Check)
@@ -54,8 +54,9 @@ jobs:
 
 
       # Vérification du Quality Gate
-      - name: Vérification du Quality Gate
+      - name: Vérifier le Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
         with:
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
-          sonar-host-url: https://sonarcloud.io
+          scanMetadataReportFile: target/sonar/report-task.txt
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
