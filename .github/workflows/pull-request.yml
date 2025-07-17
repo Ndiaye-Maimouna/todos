@@ -31,14 +31,24 @@ jobs:
           args: --path=. --verbose
 
       # Scan des vulnérabilités (OWASP Dependency-Check)
-      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+#      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+#        uses: dependency-check/Dependency-Check_Action@main
+#        with:
+#          project: "pull-request-scan"
+#          format: "HTML"
+#          out: "reports"
+#          path: "."
+#          args: "--noupdate"
+      - name: OWASP Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
         with:
           project: "pull-request-scan"
           format: "HTML"
-          out: "reports"
+          out: "./reports"
           path: "."
-          args: "--noupdate"
+          args: "--scan ./ --disableYarnAudit --disableNodeAudit"
 
 
         # Compilation et tests
