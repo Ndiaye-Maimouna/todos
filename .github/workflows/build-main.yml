@@ -96,7 +96,7 @@ jobs:
       - name: Build Docker image
         run: |
           VERSION=$(cat version.txt)
-          docker build -t monapp:$VERSION .
+          docker build -t todos:$VERSION .
           docker tag todos:$VERSION todos:latest
 
       - name: Push Docker images
