@@ -54,11 +54,6 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-      - name: Lister les fichiers générés (débogage)
-        run: |
-          find . -name "report-task.txt" || echo "Fichier non trouvé"
-          ls -la .scannerwork/ || echo "Dossier .scannerwork non trouvé"
-
       # Vérification du Quality Gate
       - name: Vérifier le Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
