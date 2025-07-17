@@ -31,13 +31,18 @@ jobs:
           args: --path=. --verbose
 
       # Scan des vulnérabilités (OWASP Dependency-Check)
-      - name: Scan des vulnérabilités (OWASP Dependency-Check)
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: "pull-request-scan"
-          format: "HTML"
-          out: "reports"
-          path: "."
+#      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+#        uses: dependency-check/Dependency-Check_Action@main
+#        with:
+#          project: "pull-request-scan"
+#          format: "HTML"
+#          out: "reports"
+#          path: "."
+      - name: Scan vulnérabilités (Dependency Check)
+        run: |
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
+          unzip dependency-check.zip -d dependency-check
+          ./dependency-check/bin/dependency-check.sh --project "todos" --scan . --format "HTML" --out ./dependency-check-report
 
       # Compilation et tests
       - name: Compilation et tests
