@@ -38,8 +38,6 @@ jobs:
           format: "HTML"
           out: "reports"
           path: "."
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
 
       # Compilation et tests
       - name: Compilation et tests
