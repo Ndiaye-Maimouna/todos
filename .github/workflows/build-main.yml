@@ -27,7 +27,7 @@ jobs:
 
       # Scan de secrets (Gitleaks)
       - name: Scan de secrets (Gitleaks)
-        uses: gitleaks/actions/gitleaks@v2
+        uses: gitleaks/gitleaks-action@v2
         with:
           args: detect --source=. --verbose
 
