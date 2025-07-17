@@ -129,7 +129,7 @@ jobs:
 
       # Vérification du Quality Gate
       - name: Vérification du Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@master
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         with:
           sonar-token: ${{ secrets.SONAR_TOKEN }}
           sonar-host-url: https://sonarcloud.io
