@@ -27,19 +27,20 @@ jobs:
         with:
           args: --path=. --verbose
 
-      - name: Verify Java Path
+      - name: Install OWASP Dependency-Check
         run: |
-          echo "JAVA_HOME: $JAVA_HOME"
-          $JAVA_HOME/bin/java -version
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/latest/download/dependency-check-8.4.0-release.zip
+          unzip dependency-check.zip -d dependency-check
+          sudo apt-get update && sudo apt-get install -y unzip
 
-      - name: OWASP Dependency-Check
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: "pull-request-scan"
-          format: "HTML"
-          out: "./reports"
-          path: "."
-          args: "--scan ./ --disableYarnAudit --disableNodeAudit"
+      - name: Run OWASP Dependency-Check
+        run: |
+          ./dependency-check/dependency-check/bin/dependency-check.sh \
+            --project "pull-request-scan" \
+            --scan ./ \
+            --format HTML \
+            --out ./reports \
+            --disableYarnAudit --disableNodeAudit
 
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
@@ -59,3 +60,9 @@ jobs:
           scanMetadataReportFile: target/sonar/report-task.txt
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload OWASP Dependency-Check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports
