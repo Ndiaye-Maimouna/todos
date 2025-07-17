@@ -83,7 +83,6 @@ jobs:
           git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
           git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} --tags
 
-
       # Build and Publish to Docker
       - name: Connexion à Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -102,7 +101,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:$VERSION
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:latest
 
-      # Déploiementt
+      # Déploiement
       - name: Déploiement
         run: |
           echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
