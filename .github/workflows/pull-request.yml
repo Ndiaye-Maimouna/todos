@@ -38,13 +38,31 @@ jobs:
 #          format: "HTML"
 #          out: "reports"
 #          path: "."
-      - name: Scan vulnérabilités (Dependency Check)
-        run: |
-          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
-          unzip dependency-check.zip -d dependency-check
-          ./dependency-check/bin/dependency-check.sh --project "todos" --scan . --format "HTML" --out ./dependency-check-report
 
-      # Compilation et tests
+      - name: Install OWASP Dependency-Check
+        run: |
+          wget https://github.com/jeremylong/DependencyCheck/releases/download/v9.0.10/dependency-check-9.0.10-release.zip
+          unzip dependency-check-9.0.10-release.zip -d dependency-check
+          chmod +x dependency-check/bin/dependency-check.sh
+
+      - name: Run Dependency-Check
+        run: |
+          ./dependency-check/bin/dependency-check.sh \
+            --project "pull-request-scan" \
+            --scan . \
+            --format HTML \
+            --out reports \
+            --disableAssembly \
+            --failOnCVSS 7
+
+      - name: Upload Dependency-Check report
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-check-report
+          path: reports
+
+
+        # Compilation et tests
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
 
