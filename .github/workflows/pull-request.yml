@@ -13,42 +13,27 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
-      # Checkout du code (branche de la PR)
       - name: Checkout du code
         uses: actions/checkout@v3
 
-      # Set up Java
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Scan de secrets (Gitleaks)
       - name: Scan de secrets (Gitleaks)
         uses: zricethezav/gitleaks-action@v1
         with:
           args: --path=. --verbose
 
-      # Scan des vulnérabilités (OWASP Dependency-Check)
-#      - name: Scan des vulnérabilités (OWASP Dependency-Check)
-#        uses: dependency-check/Dependency-Check_Action@main
-#        with:
-#          project: "pull-request-scan"
-#          format: "HTML"
-#          out: "reports"
-#          path: "."
-#          args: "--noupdate"
       - name: Verify Java Path
         run: |
-          echo "JAVA_HOME in runner: $JAVA_HOME"
-          echo "JAVA_HOME_17_X64: $JAVA_HOME_17_X64"
-          ls -la $JAVA_HOME/bin/java
-          
+          echo "JAVA_HOME: $JAVA_HOME"
+          $JAVA_HOME/bin/java -version
+
       - name: OWASP Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
-        env:
-          JAVA_HOME: '/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.15-6/x64'
         with:
           project: "pull-request-scan"
           format: "HTML"
@@ -56,12 +41,9 @@ jobs:
           path: "."
           args: "--scan ./ --disableYarnAudit --disableNodeAudit"
 
-
-        # Compilation et tests
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
 
-      # Analyse Quality Gate avec SonarCloud
       - name: Analyse Quality Gate avec SonarCloud
         run: |
           mvn sonar:sonar \
@@ -71,8 +53,6 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-
-      # Vérification du Quality Gate
       - name: Vérifier le Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
         with:
