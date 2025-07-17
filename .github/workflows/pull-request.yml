@@ -27,11 +27,13 @@ jobs:
         with:
           args: --path=. --verbose
 
+      - name: Install unzip
+        run: sudo apt-get update && sudo apt-get install -y unzip
+
       - name: Install OWASP Dependency-Check
         run: |
-          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/latest/download/dependency-check-8.4.0-release.zip
+          curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v8.4.0/dependency-check-8.4.0-release.zip
           unzip dependency-check.zip -d dependency-check
-          sudo apt-get update && sudo apt-get install -y unzip
 
       - name: Run OWASP Dependency-Check
         run: |
@@ -41,6 +43,12 @@ jobs:
             --format HTML \
             --out ./reports \
             --disableYarnAudit --disableNodeAudit
+
+      - name: Upload Dependency-Check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: ./reports
 
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
@@ -60,9 +68,3 @@ jobs:
           scanMetadataReportFile: target/sonar/report-task.txt
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Upload OWASP Dependency-Check report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: reports
