@@ -14,24 +14,9 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
-      # Checkout du code
+      # Checkout du code (branche de la PR)
       - name: Checkout du code
         uses: actions/checkout@v3
-
-      # Scan de secrets (Gitleaks)
-      - name: Scan de secrets (Gitleaks)
-        uses: zricethezav/gitleaks-action@v1
-        with:
-          args: --path=. --verbose
-
-
-      # Scan des vulnérabilités (OWASP Dependency-Check)
-      - name: Scan des vulnérabilités des dépendances
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: "main-scan"
-          format: "HTML"
-          failOnCVSS: 7.0
 
       # Set up Java
       - name: Set up Java
@@ -40,12 +25,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Scan de secrets (Gitleaks)
+      - name: Scan de secrets (Gitleaks)
+        uses: gitleaks/actions/gitleaks@v2
+        with:
+          args: detect --source=. --verbose
+
+      # Scan des vulnérabilités (OWASP Dependency-Check)
+      - name: Scan des vulnérabilités (OWASP Dependency-Check)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "pull-request-scan"
+          format: "HTML"
+          failOnCVSS: 7.0
+
       # Compilation et tests
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
 
-      # Analyse qualité de code avec Sonar
-      - name: Analyse qualité de code avec Sonar
+      # Analyse Quality Gate avec SonarCloud
+      - name: Analyse Quality Gate avec SonarCloud
         run: |
           mvn sonar:sonar \
             -Dsonar.projectKey=todos \
@@ -53,14 +52,14 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+      
 
       # Vérification du Quality Gate
-      - name: Quality Gate
+      - name: Vérification du Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
         with:
-          scanMetadataReportFile: .scannerwork/report-task.txt
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          sonar-host-url: https://sonarcloud.io
 
 
       # Release
