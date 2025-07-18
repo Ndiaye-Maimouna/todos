@@ -147,7 +147,7 @@ jobs:
 
       # DAST - Uploader le rapport HTML
       - name: Upload du rapport ZAP
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zap-report
           path: zap-report.html
