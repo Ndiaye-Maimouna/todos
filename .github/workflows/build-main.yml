@@ -118,8 +118,8 @@ jobs:
 #        run: |
 #          echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
 
-      - name: Install Railway CLI
-        run: npm install -g railway
+      - name: Installer Railway CLI
+        run: curl -sSL https://railway.app/install.sh | sh
 
       - name: Deploy to Railway
         env:
