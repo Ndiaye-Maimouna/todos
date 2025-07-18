@@ -127,27 +127,16 @@ jobs:
 #        run: |
 #          echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
 
-      # Déploiement sur Kubernetes
-      - name: Configurer l'accès Kubernetes
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" > "$GITHUB_WORKSPACE/kubeconfig"
-        env:
-          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+      # Déploiement sur RAILWAY
+      - name: Build Maven Jar
+        run: mvn clean package -DskipTests
 
-      - name: Tester la connexion Kubernetes
-        run: |
-          kubectl config get-contexts
-          kubectl get nodes
+      - name: Build and deploy to Railway
+        uses: railwayapp/cli-action@v1
+        with:
+          command: up
         env:
-          KUBECONFIG: ${{ github.workspace }}/kubeconfig
-
-      - name: Déploiement Kubernetes
-        run: |
-          VERSION=$(cat version.txt)
-          kubectl set image deployment/todos todos=${{ secrets.DOCKER_USERNAME }}/todos:$VERSION -n ${{ secrets.K8S_NAMESPACE }}
-          kubectl rollout status deployment/todos -n ${{ secrets.K8S_NAMESPACE }}
-        env:
-          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
       # DAST (placeholder)
       - name: DAST
