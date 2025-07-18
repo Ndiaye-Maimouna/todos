@@ -134,11 +134,11 @@ jobs:
       - name: Install Railway CLI
         run: curl -sSL https://railway.app/install.sh | sh
 
-      - name: Login to Railway
-        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
-
       - name: Deploy to Railway
-        run: railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up
 
       # DAST (placeholder)
       - name: DAST
