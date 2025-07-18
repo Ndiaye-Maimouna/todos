@@ -139,11 +139,12 @@ jobs:
       # DAST - Scan ZAP baseline via Docker
       - name: Exécuter un scan DAST avec OWASP ZAP (baseline)
         run: |
-          docker run --rm -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py \
-            -t https://cicd-todos-production.up.railway.app/cicd \
-            -r zap-report.html \
-            -d \
-            -I
+          docker run --rm -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy \
+          zap-baseline.py \
+          -t https://todos-production.up.railway.app \
+          -r zap-report.html \
+          -d \
+          -I
 
       # DAST - Uploader le rapport HTML
       - name: Upload du rapport ZAP
