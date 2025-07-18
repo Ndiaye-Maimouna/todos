@@ -130,16 +130,24 @@ jobs:
       # Déploiement sur Kubernetes
       - name: Configurer l'accès Kubernetes
         run: |
-          echo "${{ secrets.KUBECONFIG }}" > kubeconfig
-          export KUBECONFIG=$PWD/kubeconfig
+          echo "${{ secrets.KUBECONFIG }}" > "$GITHUB_WORKSPACE/kubeconfig"
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+
+      - name: Tester la connexion Kubernetes
+        run: |
           kubectl config get-contexts
+          kubectl get nodes
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
       - name: Déploiement Kubernetes
         run: |
-          export KUBECONFIG=$PWD/kubeconfig
           VERSION=$(cat version.txt)
           kubectl set image deployment/todos todos=${{ secrets.DOCKER_USERNAME }}/todos:$VERSION -n ${{ secrets.K8S_NAMESPACE }}
           kubectl rollout status deployment/todos -n ${{ secrets.K8S_NAMESPACE }}
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
       # DAST (placeholder)
       - name: DAST
