@@ -154,7 +154,7 @@ jobs:
         run: |
           echo "DAST à implémenter"
 
-      # DAST avec OWASP ZAP
+#       # DAST avec OWASP ZAP
 #      - name: DAST avec OWASP ZAP (baseline scan)
 #        uses: zaproxy/action-baseline@v0.10.0
 #        with:
