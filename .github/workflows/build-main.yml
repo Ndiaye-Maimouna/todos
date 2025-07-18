@@ -125,8 +125,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
-        run: railway up --service $RAILWAY_SERVICE_ID
-
+        run: railway up --service $RAILWAY_SERVICE_ID --root
 
       # DAST (placeholder)
       - name: DAST
