@@ -141,7 +141,7 @@ jobs:
         run: |
           docker run --rm -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy \
           zap-baseline.py \
-          -t https://todos-production.up.railway.app \
+          -t https://todos-production.up.railway.app/cicd \
           -r zap-report.html \
           -d \
           -I
