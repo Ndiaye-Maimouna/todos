@@ -39,6 +39,9 @@ jobs:
 #          project: "main-scan"
 #          format: "HTML"
 #          failOnCVSS: 7.0
+      - name: Créer le dossier de rapport
+        run: mkdir -p reports && sudo chown -R 1000:1000 reports
+
       - name: Lancer le scan OWASP Dependency-Check
         run: |
           docker run --rm \
