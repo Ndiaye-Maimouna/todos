@@ -109,12 +109,9 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:$VERSION
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:latest
           
-          
+
       - name: Lister les fichiers dans target
         run: ls -lh target
-
-      - name: Renommer le jar en todos.jar
-        run: mv target/todos-*.jar target/todos.jar
 
       # Déploiementt
 #      - name: Déploiement
