@@ -129,6 +129,25 @@ jobs:
         run: railway up --service $RAILWAY_SERVICE_ID --path-as-root .
 
       # DAST (placeholder)
-      - name: DAST
+#      - name: DAST
+#        run: |
+#          echo "DAST à implémenter"
+      # DAST - Attendre que l'app soit en ligne
+      - name: Attendre que l'application soit disponible
+        run: sleep 60
+
+      # DAST - Scan ZAP baseline via Docker
+      - name: Exécuter un scan DAST avec OWASP ZAP (baseline)
         run: |
-          echo "DAST à implémenter"
+          docker run --rm -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable zap-baseline.py \
+            -t https://cicd-todos-production.up.railway.app/cicd \
+            -r zap-report.html \
+            -d \
+            -I
+
+      # DAST - Uploader le rapport HTML
+      - name: Upload du rapport ZAP
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap-report.html
