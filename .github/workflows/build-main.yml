@@ -125,7 +125,7 @@ jobs:
 #      # Déploiement
 #      - name: Déploiement
 #        run: |
-#          echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
+#          echo "Déploiement à implémenter"
 
       # Déploiement sur RAILWAY
       - name: Build Maven Jar
