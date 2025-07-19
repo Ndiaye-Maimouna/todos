@@ -46,6 +46,7 @@ class TagRessourceTest {
         tag.setName("Test Tag");
     }
 
+    @SneakyThrows
     @Test
     void shouldFindAllTags() throws Exception {
         Mockito.when(tagService.findAll(any()))
@@ -59,6 +60,7 @@ class TagRessourceTest {
                 .andExpect(jsonPath("$.content[0].name").value(tag.getName()));
     }
 
+    @SneakyThrows
     @Test
     void shouldFindTagById() throws Exception {
         Mockito.when(tagService.findById(tag.getId()))
@@ -69,6 +71,7 @@ class TagRessourceTest {
                 .andExpect(jsonPath("$.name").value(tag.getName()));
     }
 
+    @SneakyThrows
     @Test
     void findById_withBadId_shouldReturnNotFound() throws Exception {
         Mockito.when(tagService.findById(Mockito.anyString()))
@@ -80,6 +83,7 @@ class TagRessourceTest {
     }
 
 
+    @SneakyThrows
     @Test
     void shouldCreateTag() throws Exception {
         Mockito.when(tagService.save(any(TagDTO.class)))
@@ -93,6 +97,7 @@ class TagRessourceTest {
                 .andExpect(jsonPath("$.name").value(tag.getName()));
     }
 
+    @SneakyThrows
     @Test
     void shouldUpdateTag() throws Exception {
         Mockito.when(tagService.update(eq(tag.getId()), any(TagDTO.class)))
@@ -105,6 +110,7 @@ class TagRessourceTest {
                 .andExpect(jsonPath("$.name").value(tag.getName()));
     }
 
+    @SneakyThrows
     @Test
     void delete_shouldDeleteTag() throws Exception {
         Mockito.doNothing().when(tagService).delete(Mockito.anyString());
@@ -114,6 +120,7 @@ class TagRessourceTest {
                 .andExpect(status().isNoContent());
     }
 
+    @SneakyThrows
     @Test
     void delete_withBadId_shouldReturnNotFound() throws Exception {
         Mockito.doThrow(new ItemNotFoundException())
@@ -124,6 +131,7 @@ class TagRessourceTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SneakyThrows
     @Test
     void deleteAll_shouldDeleteAllTags() throws Exception {
         Mockito.doNothing().when(tagService).deleteAll();
