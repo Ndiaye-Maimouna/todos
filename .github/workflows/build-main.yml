@@ -136,21 +136,44 @@ jobs:
       - name: Attendre que l'application soit disponible
         run: sleep 30
 
-        # DAST - Scan ZAP baseline via Docker
-      - name: Lancer DAST avec OWASP ZAP
-        uses: zaproxy/action-full-scan@v0.10.0
-        with:
-          target: https://cicd-todos-production.up.railway.app/cicd/
-          cmd_options: '-a'
-        env:
-          ZAP_TARGET: https://cicd-todos-production.up.railway.app/cicd/
+#        # DAST - Scan ZAP baseline via Docker
+#      - name: Lancer DAST avec OWASP ZAP
+#        uses: zaproxy/action-full-scan@v0.10.0
+#        with:
+#          target: https://cicd-todos-production.up.railway.app/cicd/
+#          cmd_options: '-a'
+#        env:
+#          ZAP_TARGET: https://cicd-todos-production.up.railway.app/cicd/
+#
+#      - name: Lister les fichiers générés
+#        run: ls -lR
+#
+#      # DAST - Uploader le rapport HTML
+#      - name: Upload du rapport ZAP
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: report
+#          path: report.html
 
-      - name: Lister les fichiers générés
-        run: ls -lR
 
-      # DAST - Uploader le rapport HTML
-      - name: Upload du rapport ZAP
+      - name: Installer Nuclei
+        run: |
+          curl -s https://api.github.com/repos/projectdiscovery/nuclei/releases/latest \
+          | grep "browser_download_url.*nuclei-linux-amd64.zip" \
+          | cut -d '"' -f 4 \
+          | wget -i -
+          unzip nuclei-linux-amd64.zip
+
+      - name: Mettre à jour les templates
+        run: ./nuclei -update-templates
+
+      - name: Lancer le scan Nuclei
+        run: |
+          mkdir -p reports
+          ./nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
+
+      - name: Upload rapport
         uses: actions/upload-artifact@v4
         with:
-          name: report
-          path: report.html
+          name: nuclei-report
+          path: reports/nuclei-report.txt
