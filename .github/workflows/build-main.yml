@@ -109,15 +109,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:$VERSION
           docker push ${{ secrets.DOCKER_USERNAME }}/todos:latest
           
-
-      - name: Lister les fichiers dans target
-        run: ls -lh target
-
-      # Déploiementt
-#      - name: Déploiement
-#        run: |
-#          echo "Déploiement à implémenter (Kubernetes, SSH, etc.)"
-
+      # Deploiment
       - name: Installer Railway CLI
         run: curl -sSL https://railway.app/install.sh | sh
 
@@ -129,32 +121,8 @@ jobs:
         run: railway up --service $RAILWAY_SERVICE_ID --path-as-root .
 
       # DAST (placeholder)
-#      - name: DAST
-#        run: |
-#          echo "DAST à implémenter"
-      # DAST - Attendre que l'app soit en ligne
       - name: Attendre que l'application soit disponible
         run: sleep 30
-
-#        # DAST - Scan ZAP baseline via Docker
-#      - name: Lancer DAST avec OWASP ZAP
-#        uses: zaproxy/action-full-scan@v0.10.0
-#        with:
-#          target: https://cicd-todos-production.up.railway.app/cicd/
-#          cmd_options: '-a'
-#        env:
-#          ZAP_TARGET: https://cicd-todos-production.up.railway.app/cicd/
-#
-#      - name: Lister les fichiers générés
-#        run: ls -lR
-#
-#      # DAST - Uploader le rapport HTML
-#      - name: Upload du rapport ZAP
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: report
-#          path: report.html
-
 
       - name: Installer Nuclei
         run: |
@@ -170,20 +138,6 @@ jobs:
       - name: Mettre à jour les templates
         run: nuclei -update-templates
 
-#      - name: Créer le dossier des rapports
-#        run: |
-#          mkdir -p reports
-#
-#      - name: Lancer le scan Nuclei
-#        run: |
-#          mkdir -p reports
-#          nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
-#
-#      - name: Upload rapport
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: nuclei-report
-#          path: reports/nuclei-report.txt
       - name: Créer dossier de rapport dans /tmp
         run: mkdir -p /tmp/reports
 
@@ -195,4 +149,3 @@ jobs:
         with:
           name: nuclei-report
           path: /tmp/reports/nuclei.txt
-

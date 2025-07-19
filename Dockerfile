@@ -8,4 +8,3 @@ COPY --from=build /app/target/*.jar todos.jar
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 ENTRYPOINT ["java", "-jar", "todos.jar"]
-

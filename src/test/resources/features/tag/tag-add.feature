@@ -31,7 +31,7 @@ Feature:  BDD Scenarios of Tag API - Add Tag
     Examples:
       | name                                                                                          |
       | n                                                                                              |
-      | You must change the name of the  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa|
+      | You must change the name of the group to have access and modify the file|
 
   Scenario: Add tag with null name should return 400
     And the following tag to add:

@@ -20,9 +20,6 @@ import org.hamcrest.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import sn.ept.git.seminaire.cicd.data.TestData;
-
-//import pour tags
-
 import sn.ept.git.seminaire.cicd.models.TagDTO;
 import sn.ept.git.seminaire.cicd.entities.Tag;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
@@ -45,9 +42,6 @@ public class TagStepIT {
     public static final String KEY_TYPE = "type";
     public static final String KEY_STATUS = "status";
     public static final String KEY_MESSAGE = "message";
-
-    //Variables pour tags
-
     public static final String API_TAG_PATH = "/cicd/api/tags";
     public static final String KEY_NAME = "name";
 
