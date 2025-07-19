@@ -13,6 +13,7 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
+      # Checkout du code
       - name: Checkout du code
         uses: actions/checkout@v3
 
@@ -22,11 +23,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Scan de secrets
       - name: Scan de secrets (Gitleaks)
         uses: zricethezav/gitleaks-action@v1
         with:
           args: --path=. --verbose
 
+      # Scan des vulnérabilités
       - name: Créer le dossier de rapport
         run: mkdir -p reports && sudo chown -R 1000:1000 reports
 
@@ -48,9 +51,11 @@ jobs:
           name: dependency-check-report
           path: ./reports/dependency-check-report.json
 
+      # Compilation et tests
       - name: Compilation et tests
         run: mvn clean verify -Put -Pit
 
+      # Analyse qualité de code avec Sonar
       - name: Analyse Quality Gate avec SonarCloud
         run: |
           mvn sonar:sonar \
@@ -60,6 +65,7 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
+      # Vérification du Quality Gate
       - name: Vérifier le Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
         with:
