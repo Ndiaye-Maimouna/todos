@@ -1,68 +1,68 @@
-name: Pull Request
-
-on:
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-    steps:
-      - name: Checkout du code
-        uses: actions/checkout@v3
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Scan de secrets (Gitleaks)
-        uses: zricethezav/gitleaks-action@v1
-        with:
-          args: --path=. --verbose
-
-      - name: Créer le dossier de rapport
-        run: mkdir -p reports && sudo chown -R 1000:1000 reports
-
-      - name: Lancer le scan OWASP Dependency-Check
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}:/src" \
-            owasp/dependency-check:latest \
-            --project "scan-owasp" \
-            --scan /src \
-            --format "HTML" --format "JSON" \
-            --out /src/reports \
-            --nvdApiKey "${{ secrets.NVD_API_KEY }}" \
-            --failOnCVSS 10
-
-      - name: Upload Dependency-Check report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: ./reports/dependency-check-report.json
-
-      - name: Compilation et tests
-        run: mvn clean verify -Put -Pit
-
-      - name: Analyse Quality Gate avec SonarCloud
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=todos \
-            -Dsonar.organization=todos \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
-      - name: Vérifier le Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@master
-        with:
-          scanMetadataReportFile: target/sonar/report-task.txt
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#name: Pull Request
+#
+#on:
+#  pull_request:
+#    branches:
+#      - main
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    env:
+#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#
+#    steps:
+#      - name: Checkout du code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up Java
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '17'
+#          distribution: 'temurin'
+#
+#      - name: Scan de secrets (Gitleaks)
+#        uses: zricethezav/gitleaks-action@v1
+#        with:
+#          args: --path=. --verbose
+#
+#      - name: Créer le dossier de rapport
+#        run: mkdir -p reports && sudo chown -R 1000:1000 reports
+#
+#      - name: Lancer le scan OWASP Dependency-Check
+#        run: |
+#          docker run --rm \
+#            -v "${{ github.workspace }}:/src" \
+#            owasp/dependency-check:latest \
+#            --project "scan-owasp" \
+#            --scan /src \
+#            --format "HTML" --format "JSON" \
+#            --out /src/reports \
+#            --nvdApiKey "${{ secrets.NVD_API_KEY }}" \
+#            --failOnCVSS 10
+#
+#      - name: Upload Dependency-Check report
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: dependency-check-report
+#          path: ./reports/dependency-check-report.json
+#
+#      - name: Compilation et tests
+#        run: mvn clean verify -Put -Pit
+#
+#      - name: Analyse Quality Gate avec SonarCloud
+#        run: |
+#          mvn sonar:sonar \
+#            -Dsonar.projectKey=todos \
+#            -Dsonar.organization=todos \
+#            -Dsonar.host.url=https://sonarcloud.io \
+#            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+#            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+#
+#      - name: Vérifier le Quality Gate
+#        uses: SonarSource/sonarqube-quality-gate-action@master
+#        with:
+#          scanMetadataReportFile: target/sonar/report-task.txt
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

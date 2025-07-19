@@ -138,14 +138,12 @@ jobs:
 
       # DAST - Scan ZAP baseline via Docker
       - name: Lancer un DAST avec ZAP Baseline Action
-        uses: zaproxy/action-baseline@v0.12.0
+        uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'https://cicd-todos-production.up.railway.app/cicd'
-          fail_action: false
-          allow_issue_writing: false
+          cmd_options: '-exclude https://cicd-todos-production.up.railway.app/.* -config context.context1.includeRegex=https://cicd-todos-production.up.railway.app/cicd.*'
           format: html
           report_file_name: zap-report.html
-
 
       # DAST - Uploader le rapport HTML
       - name: Upload du rapport ZAP
