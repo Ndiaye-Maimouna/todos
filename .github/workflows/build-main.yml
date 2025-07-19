@@ -175,7 +175,7 @@ jobs:
       - name: Lancer le scan Nuclei
         run: |
           mkdir -p reports
-          ./nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
+          nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
 
       - name: Upload rapport
         uses: actions/upload-artifact@v4
