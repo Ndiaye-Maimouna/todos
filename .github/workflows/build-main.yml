@@ -138,7 +138,7 @@ jobs:
 
         # DAST - Scan ZAP baseline via Docker
       - name: Lancer DAST avec OWASP ZAP
-        uses: zaproxy/action-full-scan@v0.9.0
+        uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: https://cicd-todos-production.up.railway.app/cicd/
           cmd_options: '-a'
@@ -149,5 +149,5 @@ jobs:
       - name: Upload du rapport ZAP
         uses: actions/upload-artifact@v4
         with:
-          name: zap-report
-          path: zap-report.html
+          name: report
+          path: report.html
