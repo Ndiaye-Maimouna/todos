@@ -136,20 +136,14 @@ jobs:
       - name: Attendre que l'application soit disponible
         run: sleep 30
 
-      # DAST - Scan ZAP baseline via Docker
-      - name: Lancer un DAST avec ZAP Baseline Action
-        uses: zaproxy/action-full-scan@v0.12.0
+        # DAST - Scan ZAP baseline via Docker
+      - name: Lancer DAST avec OWASP ZAP
+        uses: zaproxy/action-full-scan@v0.9.0
         with:
-          target: 'https://cicd-todos-production.up.railway.app/cicd'
-          cmd_options: >
-            -r report_html.html
-            -J report_json.json
-            -w report_md.md
-            -exclude https://cicd-todos-production.up.railway.app/(?!cicd).*
-            -config context.context1.includeRegex=https://cicd-todos-production.up.railway.app/cicd.*
-          fail_action: false
-          allow_issue_writing: false
-          artifact_name: zap-report
+          target: https://cicd-todos-production.up.railway.app/cicd/
+          cmd_options: '-a'
+        env:
+          ZAP_TARGET: https://cicd-todos-production.up.railway.app/cicd/
 
       # DAST - Uploader le rapport HTML
       - name: Upload du rapport ZAP
