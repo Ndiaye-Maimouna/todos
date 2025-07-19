@@ -142,40 +142,28 @@ jobs:
         run: mkdir -p /tmp/reports
 
       - name: Exécuter le scan
-        run: nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -json -o /tmp/reports/nuclei.json
+        run: nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o /tmp/reports/nuclei.txt
 
-      - name: Générer résumé statistiques
+      - name: Ajouter résumé statistiques à la fin du fichier TXT
         run: |
-          TOTAL=$(jq length /tmp/reports/nuclei.json)
-          INFO=$(jq '[.[] | select(.info.severity=="info")] | length' /tmp/reports/nuclei.json)
-          LOW=$(jq '[.[] | select(.info.severity=="low")] | length' /tmp/reports/nuclei.json)
-          MEDIUM=$(jq '[.[] | select(.info.severity=="medium")] | length' /tmp/reports/nuclei.json)
-          HIGH=$(jq '[.[] | select(.info.severity=="high")] | length' /tmp/reports/nuclei.json)
-          CRITICAL=$(jq '[.[] | select(.info.severity=="critical")] | length' /tmp/reports/nuclei.json)
+          TOTAL=$(wc -l < /tmp/reports/nuclei.txt)
+          INFO=$(grep -c '\[info\]' /tmp/reports/nuclei.txt)
+          LOW=$(grep -c '\[low\]' /tmp/reports/nuclei.txt)
+          MEDIUM=$(grep -c '\[medium\]' /tmp/reports/nuclei.txt)
+          HIGH=$(grep -c '\[high\]' /tmp/reports/nuclei.txt)
+          CRITICAL=$(grep -c '\[critical\]' /tmp/reports/nuclei.txt)
 
-          echo "====== Statistiques Nuclei ======" > /tmp/reports/nuclei_stats.txt
-          echo "Nombre total de vulnérabilités : $TOTAL" >> /tmp/reports/nuclei_stats.txt
-          echo "Par gravité :" >> /tmp/reports/nuclei_stats.txt
-          echo "info: $INFO" >> /tmp/reports/nuclei_stats.txt
-          echo "low: $LOW" >> /tmp/reports/nuclei_stats.txt
-          echo "medium: $MEDIUM" >> /tmp/reports/nuclei_stats.txt
-          echo "high: $HIGH" >> /tmp/reports/nuclei_stats.txt
-          echo "critical: $CRITICAL" >> /tmp/reports/nuclei_stats.txt
+          echo -e "\n====== Statistiques Nuclei ======" >> /tmp/reports/nuclei.txt
+          echo "Nombre total de lignes (potentielles vulnérabilités): $TOTAL" >> /tmp/reports/nuclei.txt
+          echo "Par gravité :" >> /tmp/reports/nuclei.txt
+          echo "info: $INFO" >> /tmp/reports/nuclei.txt
+          echo "low: $LOW" >> /tmp/reports/nuclei.txt
+          echo "medium: $MEDIUM" >> /tmp/reports/nuclei.txt
+          echo "high: $HIGH" >> /tmp/reports/nuclei.txt
+          echo "critical: $CRITICAL" >> /tmp/reports/nuclei.txt
 
-      - name: Uploader rapport JSON
+      - name: Uploader rapport complet TXT
         uses: actions/upload-artifact@v4
         with:
-          name: nuclei-report-json
-          path: /tmp/reports/nuclei.json
-
-      - name: Uploader le rapport
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuclei-report
-          path: /tmp/reports/nuclei.json
-
-      - name: Uploader statatistiques
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuclei-stats
-          path: /tmp/reports/nuclei_stats.txt
+          name: nuclei-report-with-stats
+          path: /tmp/reports/nuclei.txt
