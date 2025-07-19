@@ -144,26 +144,36 @@ jobs:
       - name: Exécuter le scan
         run: nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o /tmp/reports/nuclei.txt
 
-      - name: Ajouter résumé statistiques à la fin du fichier TXT
-        run: |
-          TOTAL=$(wc -l < /tmp/reports/nuclei.txt)
-          INFO=$(grep -c '\[info\]' /tmp/reports/nuclei.txt)
-          LOW=$(grep -c '\[low\]' /tmp/reports/nuclei.txt)
-          MEDIUM=$(grep -c '\[medium\]' /tmp/reports/nuclei.txt)
-          HIGH=$(grep -c '\[high\]' /tmp/reports/nuclei.txt)
-          CRITICAL=$(grep -c '\[critical\]' /tmp/reports/nuclei.txt)
-
-          echo -e "\n====== Statistiques Nuclei ======" >> /tmp/reports/nuclei.txt
-          echo "Nombre total de lignes (potentielles vulnérabilités): $TOTAL" >> /tmp/reports/nuclei.txt
-          echo "Par gravité :" >> /tmp/reports/nuclei.txt
-          echo "info: $INFO" >> /tmp/reports/nuclei.txt
-          echo "low: $LOW" >> /tmp/reports/nuclei.txt
-          echo "medium: $MEDIUM" >> /tmp/reports/nuclei.txt
-          echo "high: $HIGH" >> /tmp/reports/nuclei.txt
-          echo "critical: $CRITICAL" >> /tmp/reports/nuclei.txt
-
-      - name: Uploader rapport complet TXT
+      - name: Uploader le rapport brut
         uses: actions/upload-artifact@v4
         with:
-          name: nuclei-report-with-stats
+          name: nuclei-report
           path: /tmp/reports/nuclei.txt
+
+      - name: Générer statistiques dans un fichier à part
+        run: |
+          REPORT_PATH="/tmp/reports/nuclei.txt"
+          STATS_PATH="/tmp/reports/nuclei_stats.txt"
+
+          TOTAL=$(wc -l < "$REPORT_PATH")
+          INFO=$(grep -c '\[info\]' "$REPORT_PATH" || true)
+          LOW=$(grep -c '\[low\]' "$REPORT_PATH" || true)
+          MEDIUM=$(grep -c '\[medium\]' "$REPORT_PATH" || true)
+          HIGH=$(grep -c '\[high\]' "$REPORT_PATH" || true)
+          CRITICAL=$(grep -c '\[critical\]' "$REPORT_PATH" || true)
+
+          echo "====== Statistiques Nuclei ======" > "$STATS_PATH"
+          echo "Nombre total de lignes (détections) : $TOTAL" >> "$STATS_PATH"
+          echo "Par gravité (via tags) :" >> "$STATS_PATH"
+          echo "info: $INFO" >> "$STATS_PATH"
+          echo "low: $LOW" >> "$STATS_PATH"
+          echo "medium: $MEDIUM" >> "$STATS_PATH"
+          echo "high: $HIGH" >> "$STATS_PATH"
+          echo "critical: $CRITICAL" >> "$STATS_PATH"
+          
+
+      - name: Uploader les statistiques
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuclei-stats
+          path: /tmp/reports/nuclei_stats.txt
