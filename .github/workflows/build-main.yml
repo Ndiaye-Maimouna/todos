@@ -166,8 +166,11 @@ jobs:
           chmod +x nuclei
           sudo mv nuclei /usr/local/bin/
 
+      - name: Lister les fichiers extraits
+        run: ls -l
+
       - name: Mettre à jour les templates
-        run: ./nuclei -update-templates
+        run: nuclei -update-templates
 
       - name: Lancer le scan Nuclei
         run: |
