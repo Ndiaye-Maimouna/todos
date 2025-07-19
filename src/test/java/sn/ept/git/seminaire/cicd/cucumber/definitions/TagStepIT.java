@@ -51,11 +51,10 @@ public class TagStepIT {
     private TagRepository tagRepository;
 
     private Response response;
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    //pour tags
     private String name;
-
 
     @BeforeAll
     public static void beforeAll() {
@@ -64,8 +63,6 @@ public class TagStepIT {
 
     @Before
     public void init() {
-
-        //pour tags
         tagRepository.deleteAll();
     }
 

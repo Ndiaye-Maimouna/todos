@@ -155,13 +155,6 @@ class TagServiceTest {
     }
 
     @Test
-    void deleteAll_shouldDeleteAllTags() {
-        Mockito.doNothing().when(tagRepository).deleteAll();
-
-        assertDoesNotThrow(() -> service.deleteAll());
-    }
-
-    @Test
     void update_withExistingName_shouldThrowException() {
         dto.setName(newName);
 
@@ -174,4 +167,12 @@ class TagServiceTest {
         assertThrows(ItemExistsException.class,
                 () -> service.update(dto.getId(), dto));
     }
+
+    @Test
+    void deleteAll_shouldDeleteAllTags() {
+        Mockito.doNothing().when(tagRepository).deleteAll();
+
+        assertDoesNotThrow(() -> service.deleteAll());
+    }
+
 }
