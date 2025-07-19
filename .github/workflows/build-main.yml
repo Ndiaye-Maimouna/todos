@@ -137,15 +137,15 @@ jobs:
         run: sleep 30
 
       # DAST - Scan ZAP baseline via Docker
-      - name: Exécuter un scan DAST avec OWASP ZAP (baseline)
-        run: |
-          docker run --rm -v $(pwd):/zap/wrk/:rw ghcr.io/zaproxy/zaproxy \
-          zap-baseline.py \
-          -t https://cicd-todos-production.up.railway.app/cicd \
-          -r zap-report.html \
-          -n \
-          -d \
-          -I
+      - name: Lancer un DAST avec ZAP Baseline Action
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'https://cicd-todos-production.up.railway.app/cicd'
+          fail_action: false
+          allow_issue_writing: false
+          format: html
+          report_file_name: zap-report.html
+
 
       # DAST - Uploader le rapport HTML
       - name: Upload du rapport ZAP
