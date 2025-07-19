@@ -170,18 +170,29 @@ jobs:
       - name: Mettre à jour les templates
         run: nuclei -update-templates
 
-      - name: Créer le dossier des rapports
-        run: |
-          mkdir -p reports
-          chmod -R 777 reports
+#      - name: Créer le dossier des rapports
+#        run: |
+#          mkdir -p reports
+#
+#      - name: Lancer le scan Nuclei
+#        run: |
+#          mkdir -p reports
+#          nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
+#
+#      - name: Upload rapport
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: nuclei-report
+#          path: reports/nuclei-report.txt
+      - name: Créer dossier de rapport dans /tmp
+        run: mkdir -p /tmp/reports
 
-      - name: Lancer le scan Nuclei
-        run: |
-          mkdir -p reports
-          nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o reports/nuclei-report.txt
+      - name: Exécuter le scan
+        run: nuclei -u https://cicd-todos-production.up.railway.app/cicd/ -o /tmp/reports/nuclei.txt
 
-      - name: Upload rapport
+      - name: Uploader le rapport
         uses: actions/upload-artifact@v4
         with:
           name: nuclei-report
-          path: reports/nuclei-report.txt
+          path: /tmp/reports/nuclei.txt
+
