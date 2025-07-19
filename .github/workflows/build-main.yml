@@ -159,10 +159,12 @@ jobs:
       - name: Installer Nuclei
         run: |
           curl -s https://api.github.com/repos/projectdiscovery/nuclei/releases/latest \
-          | grep "browser_download_url.*nuclei-linux-amd64.zip" \
+          | grep "browser_download_url.*linux_amd64.zip" \
           | cut -d '"' -f 4 \
-          | wget -i -
+          | xargs wget -O nuclei-linux-amd64.zip
           unzip nuclei-linux-amd64.zip
+          chmod +x nuclei
+          sudo mv nuclei /usr/local/bin/
 
       - name: Mettre à jour les templates
         run: ./nuclei -update-templates
