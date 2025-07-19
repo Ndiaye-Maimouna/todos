@@ -18,12 +18,6 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v3
 
-      # Scan de secrets (Gitleaks)
-      - name: Scan de secrets (Gitleaks)
-        uses: zricethezav/gitleaks-action@v1
-        with:
-          args: --path=. --verbose
-
       # Set up Java
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -31,7 +25,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Scan des vulnérabilités (OWASP Dependency-Check)
+      # Scan de secrets
+      - name: Scan de secrets (Gitleaks)
+        uses: zricethezav/gitleaks-action@v1
+        with:
+          args: --path=. --verbose
+
+      # Scan des vulnérabilités
       - name: Créer le dossier de rapport
         run: mkdir -p reports && sudo chown -R 1000:1000 reports
 
@@ -117,10 +117,9 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
-          DEBUG: 1
         run: railway up --service $RAILWAY_SERVICE_ID --path-as-root .
 
-      # DAST (placeholder)
+      # DAST
       - name: Attendre que l'application soit disponible
         run: sleep 30
 
@@ -150,7 +149,7 @@ jobs:
           name: nuclei-report
           path: /tmp/reports/nuclei.txt
 
-      - name: Générer statistiques dans un fichier à part
+      - name: Générer statistiques
         run: |
           REPORT_PATH="/tmp/reports/nuclei.txt"
           STATS_PATH="/tmp/reports/nuclei_stats.txt"
